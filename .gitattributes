@@ -1,2 +1,36 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+import asyncio
+from mavsdk import System
+
+
+async def main():
+
+    drone = System()
+
+    print("Connecting to PX4....")
+    await drone.connect(system_address="udp://:14540")
+
+    print("drone connected")
+
+    async for armed in drone.telemetry.armed():
+        if armed:
+            print("drone is ready to takeoff")
+            break
+
+    await drone.action.set_takeoff_altitude(10)
+
+    await drone.action.takeoff()
+
+    async for state in drone.telemetry.landed_state():
+        if state == state.IN_AIR:
+            print("Drone took off")
+            break
+
+    await drone.action.land()
+
+    async for state in drone.telemetry.landed_state():
+        if state == state.ON_GROUND:
+            print("Drone is landed")
+            break
+
+
+asyncio.run(main())
