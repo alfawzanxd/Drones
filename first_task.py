@@ -30,7 +30,7 @@ async def battery(drone):
             await drone.action.return_to_launch()
             break
 
-
+#(لي التواصل)
 async def main():
     drone = System()
 
@@ -43,7 +43,7 @@ async def main():
     lon = home.longitude_deg
 
     size = 10 * 1e-5
-
+# نقاطي
     points = [
         (lat + size, lon),
         (lat + size, lon + size),
